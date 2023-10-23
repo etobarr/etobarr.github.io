@@ -1,96 +1,87 @@
-// Listen for keyboard events
-window.addEventListener('keydown', (e) => {
-  switch (e.key) {
-      case 'ArrowLeft':
-          let leftArrowPressed = true;
-          break;
-      case 'ArrowRight':
-          let rightArrowPressed = true;
-          break;
-      case 'ArrowUp':
-          let upArrowPressed = true;
-          break;
-      case 'ArrowDown':
-          let downArrowPressed = true;
-          break;
+//#region Keyboard Inputs
+let leftArrowPressed = false;
+let rightArrowPressed = false;
+let upArrowPressed = false;
+let downArrowPressed = false;
+
+window.addEventListener("keydown", (event) => {
+  if (event.key === "ArrowLeft") {
+    leftArrowPressed = true;
+  } else if (event.key === "ArrowRight") {
+    rightArrowPressed = true;
+  } else if (event.key === "ArrowUp") {
+    upArrowPressed = true;
+  } else if (event.key === "ArrowDown") {
+    downArrowPressed = true;
   }
 });
 
-window.addEventListener('keyup', (e) => {
-  switch (e.key) {
-      case 'ArrowLeft':
-        leftArrowPressed = false;
-        break;
-      case 'ArrowRight':
-        downArrowPressed = false;
-        break;
-      case 'ArrowUp':
-        upArrowPressed = false;
-        break;
-      case 'ArrowDown':
-        downArrowPressed = false;
-        break;
+window.addEventListener("keyup", (event) => {
+  if (event.key === "ArrowLeft") {
+    leftArrowPressed = false;
+  } else if (event.key === "ArrowRight") {
+    rightArrowPressed = false;
+  } else if (event.key === "ArrowUp") {
+    upArrowPressed = false;
+  } else if (event.key === "ArrowDown") {
+    downArrowPressed = false;
   }
 });
 
-const colors = {
-  red: "0xFFB6C1",
-  lightRed: "0xFFB6C1",
-  darkRed: "0xFF1493",
+//#endregion keyboard inputs
 
-  orange: "0xFFD700",
-  lightOrange: "0xFFD700",
-  darkOrange: "0xFFA500",
+//#region Global Variables
 
-  yellow: "0xFFFFE0",
-  lightYellow: "0xFFFFE0",
-  darkYellow: "0xFFFF00",
+  //start/stop game
+  let start = false;
 
-  green: "0x98FB98",
-  lightGreen: "0x98FB98",
-  darkGreen: "0x90EE90",
+  // color theme
+  const colors = {
+    red: "0xFFB6C1",
+    lightRed: "0xFFB6C1",
+    darkRed: "0xFF1493",
 
-  blue: "0x87CEEB",
-  lightBlue: "0x87CEEB",
-  darkBlue: "0x0000FF",
+    orange: "0xFFD700",
+    lightOrange: "0xFFD700",
+    darkOrange: "0xFFA500",
 
-  indigo: "0xADD8E6",
-  lightIndigo: "0xADD8E6",
-  darkIndigo: "0x00008B",
+    yellow: "0xFFFFE0",
+    lightYellow: "0xFFFFE0",
+    darkYellow: "0xFFFF00",
 
-  violet: "0xB0E0E6",
-  lightViolet: "0xB0E0E6",
-  darkViolet: "0x8A2BE2",
+    green: "0x98FB98",
+    lightGreen: "0x98FB98",
+    darkGreen: "0x90EE90",
 
-  white: "0xFFFFFF",
-  black: "0x000000",
-  lightGray: "0xF0F0F0",
-  gray: "0x808080",
-  darkGray: "0x555555"
-}; 
+    blue: "0x87CEEB",
+    lightBlue: "0x87CEEB",
+    darkBlue: "0x0000FF",
 
-function getRandomColor() {
-  const colorNames = Object.keys(colors);
-  const randomIndex = Math.floor(Math.random() * (colorNames.length - 5));
-  return colorNames[randomIndex];
-}
+    indigo: "0xADD8E6",
+    lightIndigo: "0xADD8E6",
+    darkIndigo: "0x00008B",
 
-window.onload = function() {
-  let app = new PIXI.Application(
-    {
-      width: 800,
-      height: 600,
-      backgroundColor: (colors.white)
-    }
-  );
-  document.body.appendChild(app.view);
+    violet: "0xB0E0E6",
+    lightViolet: "0xB0E0E6",
+    darkViolet: "0x8A2BE2",
 
-  let App = {
-    w: app.screen.width,
-    h: app.screen.height
+    white: "0xFFFFFF",
+    black: "0x000000",
+    lightGray: "0xF0F0F0",
+    gray: "0x808080",
+    darkGray: "0x555555"
+  }; 
+
+//#endregion Global Variables
+
+//#region Global Functions
+
+  // gets a random color from the theme
+  function getRandomColor() {
+    const colorNames = Object.keys(colors);
+    const randomIndex = Math.floor(Math.random() * (colorNames.length - 5));
+    return colorNames[randomIndex];
   }
-
-  
 
   // creates PIXI text
   const createText = (text, fontFamily = 'Arial', fontSize = 20, fontColor = colors.black) => {
@@ -122,7 +113,99 @@ window.onload = function() {
     return button;
   }
 
-  // menu setup
+//#endregion Global Functions
+
+
+//#region App Initialization
+window.onload = function() {
+
+  // app dimensions
+  let app = new PIXI.Application(
+    {
+      width: 800,
+      height: 600,
+      backgroundColor: (colors.white)
+    }
+  );
+  document.body.appendChild(app.view);
+
+  // app object to shorten references
+  let App = {
+    w: app.screen.width,
+    h: app.screen.height
+  }
+//#endregion App Initialization
+
+//#region Game Variables
+
+    // container for all graphics
+    const game_c = new PIXI.Container();
+
+    // paddle object
+    let paddle = {
+      x: App.w / 2,
+      y: App.h * .9,
+      w: 100,
+      h: 30
+    } 
+
+    const paddle_g = new PIXI.Graphics();
+      paddle_g.beginFill(colors.white);
+      paddle_g.drawRect(paddle.x, paddle.y, paddle.w, paddle.h);
+      paddle_g.pivot.x = paddle.w / 2; paddle_g.pivot.y = paddle.h / 2;
+
+    // ball object
+    let ball = {
+      x: App.w / 2,
+      y: App.h / 2,
+      w: 10,
+      h: 10,
+      vX: 0,
+      vY: 0
+    } 
+
+    const ball_g = new PIXI.Graphics();
+      ball_g.beginFill(colors.white);
+      ball_g.drawRect(ball.x, ball.y, ball.w, ball.h);
+      ball_g.pivot.x = ball.w / 2; ball_g.pivot.y = ball.h / 2;
+
+    // bricks
+    const wall_c = new PIXI.Container();
+
+  //#endregion Game Variables
+
+//#region Game Functions
+
+// draws grid of bricks
+const drawBricks = (w, h, buffer, rows, cols) => {
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      const brick = new PIXI.Graphics();
+        brick.beginFill(colors[getRandomColor()]);
+        brick.drawRect(i * (w + buffer), j * (h + buffer), w, h);
+        wall_c.addChild(brick);
+      console.log('drew brick');
+    }
+  }
+  wall_c.x = App.w / 2; wall_c.y = App.h / 2;
+  wall_c.pivot.x = rows * (w + buffer) / 2; wall_c.pivot.y = cols * (h + buffer) / 2;
+} 
+
+// collision logic
+function collisionTest(object1, object2)
+{
+    const bounds1 = object1.getBounds();
+    const bounds2 = object2.getBounds();
+
+    return bounds1.x < bounds2.x + bounds2.width
+        && bounds1.x + bounds1.width > bounds2.x
+        && bounds1.y < bounds2.y + bounds2.height
+        && bounds1.y + bounds1.height > bounds2.y;
+}
+
+//#endregion Game Functions
+
+//#region (1)Menu
   let menu = () => {
     console.log('entered menu');
     app.stage.removeChildren();
@@ -145,69 +228,100 @@ window.onload = function() {
       });
       menu.addChild(startButton);
   }
-  
-  //game setup
+
+  //#endregion (1)Menu
+
+//#region (2)Game Initialization
   let game = () => {
     console.log('entered game');
+    console.log(ball.y);
     app.stage.removeChildren();
     app.renderer.backgroundColor = colors.gray;
 
-    const game = new PIXI.Container();
-    app.stage.addChild(game);
-
+    app.stage.addChild(game_c);
 
     // draw bricks
-    const wall = new PIXI.Container();
-    game.addChild(wall);
-
-    const drawBricks = (w, h, buffer, rows, cols) => {
-      for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < cols; j++) {
-          const brick = new PIXI.Graphics();
-            brick.beginFill(colors[getRandomColor()]);
-            brick.drawRect(i * (w + buffer), j * (h + buffer), w, h);
-            wall.addChild(brick);
-          console.log('drew brick');
-        }
-      }
-      wall.x = App.w / 2; wall.y = App.h / 2;
-      wall.pivot.x = rows * (w + buffer) / 2; wall.pivot.y = cols * (h + buffer) / 2;
-    } 
     
+    game_c.addChild(wall_c);
     drawBricks(50, 20, 3, 10, 10);
+    app.stage.addChild(paddle_g);
+    app.stage.addChild(ball_g);
 
-    // draw paddle
-    let paddle = {
-      x: App.w / 2,
-      y: App.h * .9,
-      w: 100,
-      h: 30
-    }
-    const paddleG = new PIXI.Graphics();
-    paddleG.beginFill(colors.white);
-    paddleG.drawRect(paddle.x, paddle.y, paddle.w, paddle.h);
-    paddleG.pivot.x = paddle.w / 2; paddleG.pivot.y = paddle.h / 2;
-    app.stage.addChild(paddleG);
+    // set starting ball velocity
+    ball.vX = .5 - Math.random(); ball.vY = 1;
 
-    // draw ball
-    const ball = new PIXI.Graphics();
+    //start game loop
+    gameLoop();
+  }
 
+  //#endregion (2)Game Initialization
 
-    // paddle inputs
-    // collision logic
-    function collisionTest(rectangle1, rectangle2) {
-      return (
-        rectangle1.x + rectangle1.width , rectangle2.x &&
-        rectangle1.x , rectangle2.x , rectangle2.width &&
-        rectangle1.y + rectangle1.height , rectangle2.y &&
-        rectangle1.y , rectangle2.y , rectangle2.height
-      );
-    }
-    
-    // win condition
+//#region (3)Game Loop
+  const gameLoop = () => {
+    app.ticker.add((delta) => {
+      
+      //#region Paddle
+
+        //redraw paddle each frame
+        paddle_g.clear()
+        paddle_g.beginFill(colors.white);
+        paddle_g.drawRect(paddle.x, paddle.y, paddle.w, paddle.h);
+        paddle_g.pivot.x = paddle.w / 2; paddle_g.pivot.y = paddle.h / 2;
+        
+        // Arrow key inputs
+        if (rightArrowPressed) {
+          paddle.x += delta * 8
+        }
+        if (leftArrowPressed) {
+          paddle.x -= delta * 8
+        }
+
+        // Canvas bounds
+        if (paddle.x + paddle.w/2 > App.w) {
+          paddle.x = App.w - paddle.w/2
+          console.log('Paddle hit right bounds');
+        }
+        else if (paddle.x - paddle.w/2 < 0) {
+          paddle.x = 0 + paddle.w/2
+          console.log('Paddle hit left bounds');
+        }
+
+      //#endregion Paddle
+      
+      //#region Ball
+
+        // redraw ball each frame
+        ball_g.clear()
+        ball_g.beginFill(colors.white);
+        ball_g.drawRect(ball.x, ball.y, ball.w, ball.h);
+        ball_g.pivot.x = ball.w / 2; ball_g.pivot.y = ball.h / 2;
+        
+        // apply velocity
+        ball.x += ball.vX; ball.y += ball.vY;
+
+        // Canvas bounds
+        if (ball.x + ball.w/2 > App.w || ball.x - ball.w/2 < 0) {
+          ball.vX = -ball.vX
+          console.log('Ball hit x bounds');
+        }
+        else if (ball.y + ball.h/2 > App.h || ball.y - ball.h/2 < 0) {
+          ball.vY = -ball.vY
+          console.log('Ball hit y bounds');
+        }
+
+      //#endregion Ball
+      console.log(collisionTest(ball, paddle));
+      // collision testing
+      if(collisionTest(paddle, ball)) {
+        if(ball.vX > 0) {}
+      }
+    });
   }
   
-  // game over screen setup
+  //#endregion (3)Game Loop
+
+//#region (4)Game Over
+
   let gameOver = () => {
     console.log('entered game over screen');
     app.stage.removeChildren();
@@ -216,13 +330,7 @@ window.onload = function() {
     app.renderer.backgroundColor = colors.black;
   }  
 
-  menu();
+  //#endregion (4)Game Over
 
-app.ticker.add((delta) => {
-  if (rightArrowPressed) {
-    paddle.x += .1;
-  }
-    mouseX = app.renderer.plugins.interaction.mouse.global.x;
-    mouseY = app.renderer.plugins.interaction.mouse.global.y;
-});
-}
+// run menu on load
+menu();}

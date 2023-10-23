@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>etobarr</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+.header {
+  padding: 80px;
+  text-align: center;
+  background: #14947a;
+  color: white;
+}
+
+.header h1 {
+  font-size: 40px;
+}
+
+/* Sticky navbar - toggles between relative and fixed, depending on the scroll position. 
+It is positioned relative until a given offset position is met in the viewport - then it "sticks" in place. */
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+}
+
+.navbar a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+}
+
+.navbar a.right {
+  float: right;
+}
+
+/* Change color on hover */
+.navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* current link */
+.navbar a.active {
+  background-color: #666;
+  color: white;
+}
+
+/* Column container */
+.row {  
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+/* Create two unequal columns that sits next to each other */
+/* Sidebar */
+.side {
+  -ms-flex: 30%;
+  flex: 15%;
+  background-color: #f1f1f1;
+  padding: 20px;
+}
+
+/* Main column */
+.main {   
+  -ms-flex: 70%; /* IE10 */
+  flex: 70%;
+  background-color: white;
+  padding: 20px;
+}
+
+/* Footer */
+.footer {
+  padding: 20px;
+  text-align: center;
+  background: #ddd;
+}
+
+/* Responsive layout - when the screen is less than 700px wide, 
+make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 700px) {
+  .row {   
+    flex-direction: column;
+  }
+}
+
+/* Responsive layout - when the screen is less than 400px wide, 
+make the navigation links stack on top of each other instead of next to each other */
+@media screen and (max-width: 400px) {
+  .navbar a {
+    float: none;
+    width: 100%;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="header">
+  <h1>etobarr</h1>
+  <p>My Website</p>
+</div>
+
+<div class="navbar">
+  <a href="index.html"> Home </a>
+  <a href="../index.html"> Games </a>
+  <a href="index.html" class="active"> Files </a>
+  <a href="#" class="right"> Link 3 </a>
+</div>
+
+<div class="row">
+  <div class="side">
+    <h2> About me </h2>
+      <img height = 250, src = "../Images/stonks_cropped.png" alt="stonks guy"></img>
+      <p> <b>Name:</b> Ethan Barrows </p>
+      <p> <b>School:</b> Indiana University, Kelley School of Business </p>
+      <p> <b>Year:</b> Senior </p>
+  </div>
+  <div class="main">
+    <h1> FILES </h1>
+      <p>Note: You will need to unblock macros after downloading each file by checking the "Unblock" box within the file's properties.</p>
+      <h2> Wordle </h2>
+        <a href = "files/Wordle.xlsm" download><img height = 250, src = "thumbnails/wordle_ss.png"> </img></a>
+        <h5>Wordle created using Excel.</h4>
+        <p> ... </p>
+      <h3> Deloitte Data Challenge </h3>
+        <a href = "files/Deloitte_Data_Challenge.xlsm" dwonload><img height = 200, src = "thumbnails/coffee.jpg"> </img> </a>
+        <h5>A project regarding a sustainability decision. Earned 1st place in the Deloitte Data Challenge of Spring 2022.</h5>
+  </div>
+</div>
+
+<div class="footer">
+  <h2> the end </h2>
+</div>
+
+</body>
+</html>
