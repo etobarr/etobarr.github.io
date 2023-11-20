@@ -186,7 +186,7 @@ const gameOver = (winner) => {
   quitButton.on('click', () => {
     console.log('> Quitting');
     app.stage.removeChildren();
-    window.location.href = '../index.html';
+    window.location.href = '../apps.html';
   });
 
   gameOverContainer.addChild(gameOverText, winnerText, restartButton, quitButton);
