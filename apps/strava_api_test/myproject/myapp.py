@@ -18,7 +18,7 @@ STRAVA_CLIENT_ID = '116573'
 STRAVA_CLIENT_SECRET = 'f178359239fbb2c061697c8163a874471ca263de'
 STRAVA_AUTH_BASE_URL = 'https://www.strava.com/oauth/authorize'
 STRAVA_TOKEN_URL = 'https://www.strava.com/oauth/token'
-REDIRECT_URI = 'http://localhost:5000/callback'
+REDIRECT_URL = 'https://etobarr.pythonanywhere.com/callback'
 
 @app.route('/')
 def index():
@@ -48,7 +48,7 @@ def login():
     params = {
         'client_id': STRAVA_CLIENT_ID,
         'response_type': 'code',
-        'redirect_uri': REDIRECT_URI,
+        'redirect_uri': REDIRECT_URL,
         'scope': 'read,activity:read',
         'approval_prompt': 'force'
     }
