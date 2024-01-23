@@ -7,7 +7,7 @@ app.secret_key = '!@#super_secret_key321456'
 
 # Database setup
 def init_db():
-    with sqlite3.connect('/home/etobarr/token.db') as conn:
+    with sqlite3.connect('working/token.db') as conn:
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS messages (content TEXT)''')
         c.execute('''CREATE TABLE IF NOT EXISTS strava_tokens (user_id INTEGER PRIMARY KEY, access_token TEXT)''')
@@ -36,7 +36,7 @@ def hello(name):
 def message():
     if request.method == 'POST':
         content = request.form['content']
-        with sqlite3.connect('example.db') as conn:
+        with sqlite3.connect('working/token.db') as conn:
             c = conn.cursor()
             c.execute("INSERT INTO messages (content) VALUES (?)", (content,))
             conn.commit()
@@ -70,7 +70,7 @@ def callback():
     # Replace this with the actual user ID or a method to identify the user
     user_id = 1  
 
-    with sqlite3.connect('example.db') as conn:
+    with sqlite3.connect('working/token.db') as conn:
         c = conn.cursor()
         # Update or insert the token
         c.execute("INSERT OR REPLACE INTO strava_tokens (user_id, access_token) VALUES (?, ?)", (user_id, access_token))
