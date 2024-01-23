@@ -3,50 +3,17 @@
 <head>
     <title>Cycling Statistics Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- Add any additional libraries for charts or styling -->
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Cycling Statistics Dashboard</h1>
+            <h1>Welcome to My Cycling Statistics Dashboard</h1>
         </header>
 
-        <section id="stats-overview">
-            <h2>Overview</h2>
-            <div class="stat">
-                <h3>Total Distance</h3>
-                <p id="total-distance">-- km</p>
-            </div>
-            <div class="stat">
-                <h3>Average Speed</h3>
-                <p id="average-speed">-- km/h</p>
-            </div>
-            <div class="stat">
-                <h3>Max Speed</h3>
-                <p id="max-speed">-- km/h</p>
-            </div>
-            <!-- Add more stats as needed -->
-        </section>
+        <!-- Add a link to the login route -->
+        <a href="{{ url_for('login') }}">Login with Strava</a>
 
-        <section id="recent-rides">
-            <h2>Recent Rides</h2>
-            <div id="rides-list">
-                <!-- Dynamically load recent rides here -->
-            </div>
-        </section>
-
-        <section id="rides-chart">
-            <h2>Ride Analysis</h2>
-            <canvas id="ridesChart"></canvas>
-            <!-- You will use JavaScript to draw charts here -->
-        </section>
-
-        <footer>
-            <p>Dashboard for Strava Cycling Stats</p>
-        </footer>
+        <!-- Other content -->
     </div>
-
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <!-- Include any additional JS libraries -->
 </body>
 </html>
