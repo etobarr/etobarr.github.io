@@ -7,7 +7,7 @@ app.secret_key = '!@#super_secret_key321456'
 
 # Database setup
 def init_db():
-    with sqlite3.connect('example.db') as conn:
+    with sqlite3.connect('/home/etobarr/example.db') as conn:
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS messages (content TEXT)''')
         c.execute('''CREATE TABLE IF NOT EXISTS strava_tokens (user_id INTEGER PRIMARY KEY, access_token TEXT)''')
