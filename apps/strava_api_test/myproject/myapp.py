@@ -1,13 +1,15 @@
 from flask import Flask, render_template, request, url_for, redirect, session
 import sqlite3
 import requests
+import os
 
 app = Flask(__name__)
 app.secret_key = '!@#super_secret_key321456'
 
 # Database setup
 def init_db():
-    with sqlite3.connect('working/token.db') as conn:
+    database_path = os.path.join(app.root_path, 'working/token.db')
+    with sqlite3.connect(database_path) as conn:
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS messages (content TEXT)''')
         c.execute('''CREATE TABLE IF NOT EXISTS strava_tokens (user_id INTEGER PRIMARY KEY, access_token TEXT)''')
@@ -57,6 +59,7 @@ def login():
 
 @app.route('/callback')
 def callback():
+    init_db()  # Initialize the database
     code = request.args.get('code')
     data = {
         'client_id': STRAVA_CLIENT_ID,
@@ -70,7 +73,8 @@ def callback():
     # Replace this with the actual user ID or a method to identify the user
     user_id = 1  
 
-    with sqlite3.connect('working/token.db') as conn:
+    database_path = os.path.join(app.root_path, 'working/token.db')
+    with sqlite3.connect(database_path) as conn:
         c = conn.cursor()
         # Update or insert the token
         c.execute("INSERT OR REPLACE INTO strava_tokens (user_id, access_token) VALUES (?, ?)", (user_id, access_token))
