@@ -25,6 +25,27 @@ def index():
     print("Accessed index route")
     return render_template('index.html')
 
+@app.route('/about')
+def about():
+    print("Accessed about route")
+    return render_template('about.html')
+
+@app.route('/hello/<name>')
+def hello(name):
+    print("Accessed hello route with name:", name)
+    return 'Hello, {}!'.format(name)
+
+@app.route('/message', methods=['GET', 'POST'])
+def message():
+    if request.method == 'POST':
+        content = request.form['content']
+        with sqlite3.connect('/home/etobarr/myproject/apps/strava_api_test/myproject/working/token.db') as conn:
+            c = conn.cursor()
+            c.execute("INSERT INTO messages (content) VALUES (?)", (content,))
+            conn.commit()
+            print("Message inserted into the database")
+        return redirect(url_for('index'))
+    return render_template('message.html')
 
 @app.route('/login')
 def login():
@@ -63,7 +84,7 @@ def callback():
         conn.commit()
         print("Access token saved in the database")
 
-    return render_template('dashboard.html')
+    return 'You have been successfully logged in with Strava!'
 
 if __name__ == '__main__':
     init_db()  # Initialize the database
