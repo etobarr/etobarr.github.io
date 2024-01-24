@@ -78,6 +78,8 @@ def callback():
         c.execute("INSERT OR REPLACE INTO strava_tokens (user_id, access_token) VALUES (?, ?)", (user_id, access_token))
         conn.commit()
 
+    logging.debug('You have been successfully logged in with Strava!')
+
     return 'You have been successfully logged in with Strava!'
 
 if __name__ == '__main__':
@@ -86,6 +88,6 @@ if __name__ == '__main__':
     # Configure logging to print messages to the console
     logging.basicConfig(level=logging.DEBUG)  # Set the logging level to DEBUG
 
-    print('database initialized')
+    logging.debug('database initialized')
 
     app.run(debug=True)
