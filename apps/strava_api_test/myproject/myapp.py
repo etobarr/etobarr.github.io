@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, url_for, redirect, session
 import sqlite3
 import requests
+import load_rides
 
 app = Flask(__name__)
 app.secret_key = '!@#super_secret_key321456'
@@ -63,7 +64,11 @@ def callback():
         conn.commit()
         print("Access token saved in the database")
 
-    return render_template('dashboard.html', user_access_token=access_token)
+    ride_df = load_rides.get_new_rides(access_token)
+    df = load_rides.get_new_rides_stream_data(access_token, ride_df)
+    last_ride_name = df['name'][len(df)]
+
+    return render_template('dashboard.html', user_access_token=access_token, test_data = last_ride_name)
 
 if __name__ == '__main__':
     init_db()  # Initialize the database
