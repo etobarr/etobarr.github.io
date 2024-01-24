@@ -63,7 +63,7 @@ def callback():
         conn.commit()
         print("Access token saved in the database")
 
-    return render_template('dashboard.html')
+    return render_template('dashboard.html', user_access_token=access_token)
 
 if __name__ == '__main__':
     init_db()  # Initialize the database
