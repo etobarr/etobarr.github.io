@@ -97,8 +97,7 @@ def get_new_rides_stream_data(access_token:str, input_df:pd.DataFrame) -> pd.Dat
 
                 # request stream data
                 stream_url = f"https://www.strava.com/api/v3/activities/{row['id']}/streams"
-                stream_data = requests.get(stream_url, headers=header, params=stream_params).json()
-                print(stream_data)
+                stream_data = requests.get(stream_url, headers=header, params=stream_params).json() 
                 if stream_data.get('message', 'OK') == 'Rate Limit Exceeded':
                     print('Error: rate limit exceeded')
                     break
