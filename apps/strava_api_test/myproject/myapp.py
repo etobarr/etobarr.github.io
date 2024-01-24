@@ -8,8 +8,7 @@ app.secret_key = '!@#super_secret_key321456'
 
 # Database setup
 def init_db():
-    database_path = os.path.join(app.root_path, 'working/token.db')
-    with sqlite3.connect(database_path) as conn:
+    with sqlite3.connect('/home/etobarr/myproject/apps/strava_api_test/myproject/working') as conn:
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS messages (content TEXT)''')
         c.execute('''CREATE TABLE IF NOT EXISTS strava_tokens (user_id INTEGER PRIMARY KEY, access_token TEXT)''')
@@ -59,7 +58,6 @@ def login():
 
 @app.route('/callback')
 def callback():
-    init_db()  # Initialize the database
     code = request.args.get('code')
     data = {
         'client_id': STRAVA_CLIENT_ID,
@@ -73,8 +71,7 @@ def callback():
     # Replace this with the actual user ID or a method to identify the user
     user_id = 1  
 
-    database_path = os.path.join(app.root_path, 'working/token.db')
-    with sqlite3.connect(database_path) as conn:
+    with sqlite3.connect('/home/etobarr/myproject/apps/strava_api_test/myproject/working') as conn:
         c = conn.cursor()
         # Update or insert the token
         c.execute("INSERT OR REPLACE INTO strava_tokens (user_id, access_token) VALUES (?, ?)", (user_id, access_token))
@@ -84,4 +81,5 @@ def callback():
 
 if __name__ == '__main__':
     init_db()  # Initialize the database
+    print('database initialized')
     app.run(debug=True)
