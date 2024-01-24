@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, url_for, redirect, session
 import sqlite3
 import requests
 import os
+import logging
 
 app = Flask(__name__)
 app.secret_key = '!@#super_secret_key321456'
@@ -81,5 +82,10 @@ def callback():
 
 if __name__ == '__main__':
     init_db()  # Initialize the database
+
+    # Configure logging to print messages to the console
+    logging.basicConfig(level=logging.DEBUG)  # Set the logging level to DEBUG
+
     print('database initialized')
+
     app.run(debug=True)
