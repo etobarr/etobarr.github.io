@@ -60,6 +60,7 @@ def get_new_rides(access_token:str) -> pd.DataFrame:
     all_activities_df = pd.DataFrame(all_activities) # converts list to df
     all_rides_df = filter_to_cycling_with_stream_data(all_activities_df) # filters to cycling activities with stream data
 
+    '''
     try: # append only new activities so as not to overwrite existing data
         existing_rides_df = pd.read_json(file_name, orient='records') # retrieves existing data from local file
         new_ride_ids = list(set(all_rides_df['id'].values) - set(existing_rides_df['id'].values)) # retrieves IDs from new rides
@@ -67,9 +68,9 @@ def get_new_rides(access_token:str) -> pd.DataFrame:
         ride_df = pd.concat([new_rides_df, existing_rides_df]) # appends new and existing rides
         print(str(len(new_rides_df)) + ' new rides appended \n')
     except FileNotFoundError:
-        ride_df = all_rides_df.copy() # saves all loaded rides to new local file
-        print('could not find existing file - new file created')
-        print(str(len(ride_df)) + ' rides saved \n')
+    '''
+    ride_df = all_rides_df.copy() # saves all loaded rides to new local file
+    print(str(len(ride_df)) + ' rides saved \n')
     return ride_df
 
 def get_new_rides_stream_data(access_token:str, input_df:pd.DataFrame) -> pd.DataFrame:
