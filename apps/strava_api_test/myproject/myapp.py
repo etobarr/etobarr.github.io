@@ -13,7 +13,7 @@ def init_db():
         c = conn.cursor()
         c.execute('''CREATE TABLE IF NOT EXISTS strava_tokens (user_id INTEGER PRIMARY KEY, access_token TEXT)''')
         conn.commit()
-        print("Database initialized successfully")
+        print("Database initialized 2")
 
 # Strava OAuth Configuration
 STRAVA_CLIENT_ID = '116573'
@@ -63,6 +63,7 @@ def callback():
     with sqlite3.connect(db_path) as conn:
         c = conn.cursor()
         # Update or insert the token
+        c.execute('''CREATE TABLE IF NOT EXISTS strava_tokens (user_id INTEGER PRIMARY KEY, access_token TEXT)''')
         c.execute("INSERT OR REPLACE INTO strava_tokens (user_id, access_token) VALUES (?, ?)", (user_id, access_token))
         conn.commit()
         print("Access token saved in the database")
@@ -77,5 +78,7 @@ def callback():
     return render_template('dashboard.html', user_access_token=access_token, test_data = 'last_ride_name')
 
 if __name__ == '__main__':
+    print('Running app...')
     init_db()  # Initialize the database
+    print('Database initialized 1')
     app.run(debug=True)
