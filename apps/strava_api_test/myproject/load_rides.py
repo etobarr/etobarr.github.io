@@ -1,5 +1,6 @@
 import pandas as pd
 import requests
+import sqlite3
 
 def filter_to_cycling_with_stream_data(activity_df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -22,7 +23,7 @@ def filter_to_cycling_with_stream_data(activity_df: pd.DataFrame) -> pd.DataFram
     df = df[df['device_watts'] | df['has_heartrate']].copy()
     return df
 
-def get_new_rides(access_token:str) -> pd.DataFrame:
+def get_new_rides(access_token:str, existing_rides_df:pd.DataFrame) -> pd.DataFrame:
     """
     Fetches new rides from Strava using user's url and access token.
     """
@@ -60,18 +61,15 @@ def get_new_rides(access_token:str) -> pd.DataFrame:
     all_activities_df = pd.DataFrame(all_activities) # converts list to df
     all_rides_df = filter_to_cycling_with_stream_data(all_activities_df) # filters to cycling activities with stream data
 
-    '''
-    try: # append only new activities so as not to overwrite existing data
-        existing_rides_df = pd.read_json(file_name, orient='records') # retrieves existing data from local file
+    if existing_rides_df != None: # append only new activities so as not to overwrite existing data
         new_ride_ids = list(set(all_rides_df['id'].values) - set(existing_rides_df['id'].values)) # retrieves IDs from new rides
         new_rides_df = all_rides_df[all_rides_df['id'].isin(new_ride_ids)] # creates df of new rides
         ride_df = pd.concat([new_rides_df, existing_rides_df]) # appends new and existing rides
         print(str(len(new_rides_df)) + ' new rides appended \n')
-    except FileNotFoundError:
-    '''
-    ride_df = all_rides_df.copy() # saves all loaded rides to new local file
-    print(str(len(ride_df)) + ' rides saved \n')
-    return ride_df
+    else:
+        ride_df = all_rides_df.copy() # saves all loaded rides to new local file
+        print(str(len(ride_df)) + ' rides saved \n')
+        return ride_df
 
 def get_new_rides_stream_data(access_token:str, input_df:pd.DataFrame) -> pd.DataFrame:
     """
@@ -122,4 +120,26 @@ def get_new_rides_stream_data(access_token:str, input_df:pd.DataFrame) -> pd.Dat
         return input_df
     else:
         print('no new data to retrieve')
+        return None
+    
+def save_dataframe_to_db(user_id, df):
+    # Ensure the table name is unique for each user
+    table_name = f'user_{user_id}_data'
+    
+    # Use Pandas to_sql method to save the DataFrame to the SQLite database
+    df.to_sql(table_name, conn, if_exists='append', index=False)
+
+def retrieve_dataframe_from_db(user_id):
+    # Ensure the table name is unique for each user
+    table_name = f'user_{user_id}_data'
+    
+    # Query the database to retrieve the data from the user's table
+    query = f"SELECT * FROM {table_name}"
+    
+    try:
+        # Use Pandas to read the data into a DataFrame
+        df = pd.read_sql(query, conn)
+        return df
+    except Exception as e:
+        print(f"Error retrieving data for user {user_id}: {str(e)}")
         return None
